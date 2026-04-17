@@ -74,7 +74,23 @@ const addPlayers = async (req, res) => {
   }
 };
 
+// @desc    Get all teams with players
+// @route   GET /api/teams
+// @access  Public
+const getAllTeams = async (req, res) => {
+  try {
+    const teams = await Team.find()
+      .populate('captain', 'name email')
+      .select('name captain players createdAt');
+
+    res.status(200).json(teams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createTeam,
   addPlayers,
+  getAllTeams,
 };
