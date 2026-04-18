@@ -74,6 +74,25 @@ const addPlayers = async (req, res) => {
   }
 };
 
+// @desc    Get the captain's own team
+// @route   GET /api/teams/my
+// @access  Private/Captain
+const getMyCaptainTeam = async (req, res) => {
+  try {
+    const team = await Team.findOne({ captain: req.user._id })
+      .populate('captain', 'name email')
+      .select('name captain players createdAt');
+
+    if (!team) {
+      return res.status(404).json({ message: 'You do not have a team yet.' });
+    }
+
+    res.status(200).json(team);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Get all teams with players
 // @route   GET /api/teams
 // @access  Public
@@ -93,4 +112,5 @@ module.exports = {
   createTeam,
   addPlayers,
   getAllTeams,
+  getMyCaptainTeam,
 };

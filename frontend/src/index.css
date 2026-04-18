@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@theme {
+  --color-app-bg: #0B0F1A;
+  --color-app-card: #111827;
+  --color-app-border: #1F2937;
+  --color-app-accent: #9333ea;
+  --color-app-accentHover: #a855f7;
+  --color-app-muted: #9ca3af;
+  --color-app-faint: #6b7280;
+}
+
+body {
+  background: #0B0F1A;
+  color: white;
+}
