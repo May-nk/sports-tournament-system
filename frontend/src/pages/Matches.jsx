@@ -1,8 +1,13 @@
-import { Component, useState, useEffect, useCallback } from 'react';
+import { Component, useState, useEffect, useCallback, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getMatches, updateScore } from '../services/matchService';
 import { getMyTeam } from '../services/teamService';
 import { getRole, getToken, getUser } from '../services/authService';
 import { useTournament } from '../context/TournamentContext';
+
+gsap.registerPlugin(ScrollTrigger);
+
 
 /* ═══════════════════════════════════════════════════════════════════
    ERROR BOUNDARY
@@ -294,6 +299,7 @@ const MatchesInner = () => {
   const [hasLoaded,   setHasLoaded]   = useState(false);
   const [toast,       setToast]       = useState({ msg: '', type: 'success' });
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'mine' | 'upcoming' | 'completed'
+  const containerRef = useRef(null);
 
   const showToast = useCallback((msg, type = 'success') => {
     setToast({ msg, type });
@@ -355,6 +361,30 @@ const MatchesInner = () => {
 
     return base;
   })();
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const cards = containerRef.current.children;
+      gsap.fromTo(cards, 
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 85%",
+          }
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [visibleMatches]); // animate when data updates
 
   /* ── Filter tabs config ──────────────────────────────────────────── */
   const filterTabs = [
@@ -447,7 +477,7 @@ const MatchesInner = () => {
 
       {/* ── Match Cards Grid ─────────────────────────────────────────── */}
       {!loading && visibleMatches.length > 0 && (
-        <div id="matches-grid"
+        <div id="matches-grid" ref={containerRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleMatches.map((match, idx) =>
             isAdmin ? (
