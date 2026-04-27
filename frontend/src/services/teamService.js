@@ -19,3 +19,15 @@ export const addPlayers = (teamId, players, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+export const editPlayer = (teamId, playerId, data, token) => {
+  return api.put(`/teams/${teamId}/players/${playerId}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const removePlayer = (teamId, playerId, token) => {
+  return api.delete(`/teams/${teamId}/players/${playerId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
