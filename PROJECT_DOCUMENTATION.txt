@@ -1,0 +1,439 @@
+1. PROJECT OVERVIEW
+Project Title: Sports Tournament Management System
+Project Domain: Web Application / Event Management
+Problem Statement: Organizing a sports tournament manually often involves juggling spreadsheets, dealing with scattered communication channels, and facing delays in updating scores and standings. This manual process is error-prone and creates friction for organizers, teams, and fans trying to follow the event.
+Need for the System: There is a critical need for a centralized, accessible platform that automates tournament workflows, provides distinct role-based portals for organizers and team managers, and ensures that match schedules and standings are updated and visible in real-time.
+Scope of the Project: The project encompasses a full-stack web application with secure authentication, role-based access control (Admin and Captain), tournament creation and management, team/roster registration, match scheduling, scoring, and dynamic leaderboards.
+Target Users: Tournament Administrators (Organizers) and Team Captains (Managers/Players).
+Main Objectives: 
+- Automate the process of tournament scheduling and team registration.
+- Provide secure, role-based dashboards for different user types.
+- Ensure real-time, dynamic calculation of team standings on a leaderboard.
+- Deliver a modern, visually engaging, and responsive User Interface.
+Expected Outcomes: A fully functional web platform that significantly reduces the administrative overhead of managing sports events, improves communication, and provides an engaging experience for teams participating in tournaments.
+Project Features Summary: Role-Based Access Control, Tournament Management (CRUD), Team & Roster Management, Tournament Registration, Match Scheduling & Scoring, Automated Leaderboard, Modern UI with GSAP animations, Secure JWT Authentication.
+
+2. LITERATURE REVIEW INFORMATION
+Existing systems/platforms similar to this project: Toornament, Challonge, IMLeagues.
+Analysis of existing solutions: Many existing platforms are highly complex, have steep learning curves, are overly cluttered with ads, or target massive professional e-sports organizations rather than local, collegiate, or mid-tier sports leagues.
+Features adopted from existing systems: Bracket visualization concepts, match scheduling matrices, and automated points calculation systems based on win/loss/draw outcomes.
+Technologies used in similar systems: Historically, platforms used PHP, MySQL, and traditional server-side rendered HTML. Modern platforms have transitioned to Single Page Applications (React/Vue).
+Limitations of existing systems: High subscription costs for basic features, cluttered user interfaces, lack of modern micro-animations, and inflexible data schemas that make managing varied sports difficult.
+Motivation behind building this project: To build a modern, sleek, fast, and easy-to-use application using the modern MERN stack. By leveraging React 19, Tailwind CSS 4, and GSAP, the goal is to provide a premium user experience without the bloat found in enterprise alternatives.
+
+3. PROBLEM DEFINITION & METHODOLOGY
+3.1 Problem Definition
+The exact problem being solved is the inefficiency and disorganization inherent in manual sports tournament management. Relying on paper-based forms, manual scorekeeping, and phone-based scheduling leads to scheduling conflicts, lost data, delayed leaderboard updates, and overall dissatisfaction among participants and organizers.
+
+3.2 Objectives
+1. Implement a secure role-based authorization system.
+2. Develop an intuitive Admin panel for tournament and match management.
+3. Develop a Captain portal for team creation and tournament enrollment.
+4. Automate the calculation of leaderboard standings based on match results.
+5. Create a seamless, responsive, and animated user interface.
+
+3.3 Proposed Solution
+The proposed solution is the "Sports Tournament Management System", a full-stack web application. It utilizes a centralized database to store all entities (Users, Tournaments, Teams, Matches). Admins can log in to create events and schedule matches, while Captains can log in to register their rosters and join events. A centralized backend API orchestrates the business logic, ensuring scores instantly reflect on the public leaderboard.
+
+3.4 Methodology
+Development methodology used: Agile Software Development (Iterative approach with continuous testing).
+Design approach: Component-Based Architecture for the frontend; MVC (Model-View-Controller) inspired architecture for the backend API.
+Database approach: Document-Oriented NoSQL approach, allowing for flexible schemas, especially useful for dynamic team rosters.
+Workflow: Admin creates Tournament -> Captain creates Team -> Captain registers Team for Tournament -> Admin approves registration -> Admin schedules Matches -> Matches are played -> Admin updates Scores -> Leaderboard automatically updates.
+
+3.5 Development Approach
+Frontend strategy: Single Page Application (SPA) using React 19 and Vite. State is managed via React Context API. Styling is utility-first using Tailwind CSS 4, with complex animations handled by GSAP.
+Backend strategy: Node.js server using Express.js to provide RESTful endpoints. Security is enforced via custom middleware validating JSON Web Tokens (JWT).
+Database strategy: MongoDB used as the primary data store. Mongoose ODM is used to define strict schemas, enforce validations, and handle cross-collection relationships via population.
+
+4. SYSTEM REQUIREMENTS
+Hardware Requirements
+Processor: Minimum Intel Core i3 or AMD Ryzen 3 (Core i5/Ryzen 5 recommended for smooth development)
+RAM: 4 GB RAM minimum (8 GB recommended)
+Storage: 1 GB of free disk space
+Internet Requirement: Active broadband connection for API requests and cloud database (MongoDB Atlas) access.
+
+Software Requirements
+Operating System: Windows 10/11, macOS, or Linux
+IDE: Visual Studio Code
+Programming Languages: JavaScript (ES6+), HTML5, CSS3
+Frameworks: React 19, Express.js, Tailwind CSS v4
+Database: MongoDB
+APIs: RESTful API Architecture
+Libraries: Axios, React Router DOM, GSAP, Mongoose, bcryptjs, jsonwebtoken, cors
+Tools: Git, Vite, npm/yarn, Postman (for testing API endpoints)
+
+5. TECHNOLOGY STACK
+Frontend Technologies
+HTML/CSS
+- Purpose: Base structure and global styling.
+- Why chosen: Standard web technologies required for rendering in the browser.
+- Where used: 'index.html' and global 'index.css'.
+
+Tailwind CSS v4
+- Purpose: Utility-first CSS styling.
+- Why chosen: Allows for rapid UI development, consistent design system, and built-in responsiveness without writing custom CSS classes.
+- Where used: Across all React component files as `className` strings.
+
+JavaScript (ES6+)
+- Purpose: Core logic and interactivity.
+- Why chosen: Lingua franca of the web; allows using the same language on frontend and backend.
+- Where used: Throughout the entire codebase.
+
+React 19
+- Purpose: Building the user interface.
+- Why chosen: Component-based architecture promotes reusability, Virtual DOM ensures high performance, and massive ecosystem.
+- Where used: All frontend UI components and pages in the `src/` directory.
+
+GSAP (GreenSock Animation Platform)
+- Purpose: High-performance animations.
+- Why chosen: More powerful and performant than CSS animations for complex, timeline-based sequences and page transitions.
+- Where used: Page mounting animations, dashboard layout transitions, and interactive UI elements.
+
+React Router DOM
+- Purpose: Client-side routing.
+- Why chosen: Enables SPA navigation without page reloads.
+- Where used: `App.jsx` to map URLs to specific page components.
+
+Axios
+- Purpose: HTTP client for making API requests.
+- Why chosen: Automatic JSON data transformation, support for interceptors (useful for attaching JWT tokens).
+- Where used: `src/services/` directory for all backend communication.
+
+Backend Technologies
+Node.js
+- Purpose: Server runtime environment.
+- Why chosen: Asynchronous, event-driven architecture makes it highly scalable and allows full-stack JavaScript development.
+- Where used: The underlying runtime for the entire `backend/` directory.
+
+Express.js
+- Purpose: Web framework for Node.js.
+- Why chosen: Minimalist, unopinionated framework that makes routing and middleware integration straightforward.
+- Where used: `server.js` and `routes/` directory to define API endpoints.
+
+REST API Architecture
+- Purpose: Standardize client-server communication.
+- Why chosen: Stateless, scalable, and easy to consume by modern frontends.
+- Where used: Across all backend controllers.
+
+Database Technologies
+MongoDB
+- Purpose: Primary Database.
+- Why chosen: NoSQL document database fits perfectly with JSON data structures typical in modern JavaScript apps. Flexible schema handles variable data like team rosters effortlessly.
+- Collections/Tables Used: Users, Tournaments, Teams, Matches, TeamTournaments.
+- Relationships: Referential relationships using ObjectIds (e.g., Match references TeamA, TeamB, and Tournament).
+
+Mongoose
+- Purpose: Object Data Modeling (ODM) library for MongoDB and Node.js.
+- Why chosen: Provides rigorous schema validation, query building, and business logic hooks on top of MongoDB.
+- Where used: `models/` directory for defining schemas and interacting with the DB in controllers.
+
+Additional Services
+Authentication Service: JSON Web Tokens (JWT) used for stateless authentication.
+Password Hashing: bcryptjs used to securely salt and hash user passwords before storing them.
+
+6. SYSTEM ARCHITECTURE
+Presentation Layer
+- All frontend pages: Login, Register, Dashboard, Matches, Teams, Tournaments, AdminPanel, Leaderboard, Unauthorized.
+- UI responsibilities: Render dynamic data, handle user forms, manage client-side state, animate transitions using GSAP, and handle API responses/errors gracefully.
+
+Application Layer
+- Backend APIs: Expose REST endpoints under `/api/*`.
+- Business Logic: Validate input data, ensure business rules (e.g., only admins can create tournaments), calculate points for leaderboards, verify user passwords.
+- Controllers: AuthController, MatchController, TeamController, TournamentController, LeaderboardController, TeamTournamentController.
+- Services/Middleware: Auth middleware to verify JWT and attach user context to requests.
+
+Data Layer
+- Database structure: MongoDB NoSQL cluster.
+- Collections/Tables:
+  - User: Admin/Captain credentials.
+  - Team: Captain's team and player array.
+  - Tournament: Tournament configurations.
+  - TeamTournament: Pivot/Join collection tracking tournament enrollments and aggregate stats.
+  - Match: Individual match schedules and scores.
+
+Architecture Flow
+1. Request Lifecycle: Client action -> React State Update -> Axios API Call -> Express Route Handler -> Auth Middleware Validation -> Controller Logic -> Mongoose Query -> MongoDB Operation -> Controller Response -> Axios Promise Resolution -> UI Update.
+2. Data Flow: Data flows from MongoDB through Mongoose models, is formatted by Express controllers as JSON, sent via HTTP to the React frontend, where it is stored in Context or local state and rendered onto the DOM.
+
+7. DATABASE DESIGN
+1. User Collection
+- Purpose: Store authentication and authorization data.
+- Fields:
+  - `name`: String, Required. Full name.
+  - `email`: String, Required, Unique. Login identifier.
+  - `password`: String, Required. Hashed password.
+  - `role`: String, Required. Enum ('admin', 'captain').
+- Relationships: Referenced by Team (captain) and potentially Audit logs.
+
+2. Tournament Collection
+- Purpose: Store core tournament event configurations.
+- Fields:
+  - `name`: String, Required. Tournament title.
+  - `sport`: String, Required. Type of sport.
+  - `format`: String, Required. Enum ('league', 'knockout').
+  - `startDate`: Date, Required.
+  - `endDate`: Date, Required.
+  - `status`: String. Enum ('upcoming', 'ongoing', 'completed').
+- Relationships: Parent to Match and TeamTournament.
+
+3. Team Collection
+- Purpose: Store team identity and roster of players.
+- Fields:
+  - `name`: String, Required, Unique. Team name.
+  - `captain`: ObjectId, Required. Reference to User collection.
+  - `players`: Array of Objects (name: String, age: Number, position: String).
+- Relationships: Belongs to User (captain). Parent to Match (as teamA/teamB) and TeamTournament.
+
+4. Match Collection
+- Purpose: Store individual game schedules and results.
+- Fields:
+  - `tournament`: ObjectId, Required. Reference to Tournament.
+  - `teamA`: ObjectId, Required. Reference to Team.
+  - `teamB`: ObjectId, Required. Reference to Team.
+  - `scoreA`: Number. Default 0.
+  - `scoreB`: Number. Default 0.
+  - `winner`: ObjectId. Reference to Team.
+  - `date`: Date, Required. Schedule time.
+  - `venue`: String, Required. Location.
+  - `status`: String. Enum ('scheduled', 'completed').
+  - `round`: String. Round identifier.
+- Relationships: Links Tournament, Team (A), and Team (B).
+
+5. TeamTournament Collection
+- Purpose: Join collection mapping teams to the tournaments they are participating in, storing their aggregate statistics.
+- Fields:
+  - `team`: ObjectId, Required. Reference to Team.
+  - `tournament`: ObjectId, Required. Reference to Tournament.
+  - `status`: String. Enum ('pending', 'approved', 'rejected').
+  - `points`: Number. Leaderboard points.
+  - `wins`: Number.
+  - `losses`: Number.
+  - `draws`: Number.
+- Relationships: Join table between Team and Tournament.
+
+Primary Keys: `_id` field auto-generated by MongoDB for every document.
+Foreign Keys: Mongoose `ObjectId` references to other collections.
+Indexes: Implicit indexes on `_id`, and explicit unique indexes on `User.email` and `Team.name`.
+
+8. MODULE DESIGN
+1. Authentication Module
+- Purpose: Secure user access.
+- Functionalities: User registration, login, JWT token generation, password hashing.
+- Inputs: Email, Password, Name, Role.
+- Outputs: JWT token, User Object.
+- Backend APIs Used: `/api/auth/register`, `/api/auth/login`.
+- Database Operations Used: User.create(), User.findOne(), bcrypt.compare().
+
+2. User/Role Management Module
+- Purpose: Route protection.
+- Functionalities: Middleware to extract JWT, verify signature, and check `role` field.
+- Inputs: HTTP Request Headers (Authorization).
+- Outputs: `req.user` object appended to request, or 401/403 error.
+- Backend APIs Used: Applied as middleware across protected routes.
+- Database Operations Used: User.findById() inside middleware.
+
+3. Tournament Management Module (Admin)
+- Purpose: Event lifecycle management.
+- Functionalities: Create, edit, list tournaments, update statuses.
+- Inputs: Tournament details (name, dates, sport).
+- Outputs: Tournament list, Success messages.
+- Backend APIs Used: CRUD on `/api/tournaments`.
+- Database Operations Used: Tournament.find(), Tournament.create(), Tournament.findByIdAndUpdate().
+
+4. Team Management Module (Captain)
+- Purpose: Team and roster administration.
+- Functionalities: Create team, add/remove players.
+- Inputs: Team name, array of player objects.
+- Outputs: Team data.
+- Backend APIs Used: CRUD on `/api/teams`.
+- Database Operations Used: Team.create(), Team.find({ captain: req.user._id }).
+
+5. Enrollment Module
+- Purpose: Handling tournament registrations.
+- Functionalities: Captain requests to join tournament; Admin approves/rejects.
+- Inputs: Team ID, Tournament ID.
+- Outputs: TeamTournament record.
+- Backend APIs Used: CRUD on `/api/team-tournaments`.
+- Database Operations Used: TeamTournament.create(), TeamTournament.findOneAndUpdate().
+
+6. Match Management Module (Admin)
+- Purpose: Scheduling and scoring matches.
+- Functionalities: Create match schedules, input scores, declare winners.
+- Inputs: Team A, Team B, Date, Venue, Scores.
+- Outputs: Match schedule list.
+- Backend APIs Used: CRUD on `/api/matches`.
+- Database Operations Used: Match.create(), Match.findByIdAndUpdate(), updating corresponding TeamTournament points.
+
+7. Leaderboard Module
+- Purpose: Real-time standings display.
+- Functionalities: Calculate and sort teams based on points, wins, and draws in a specific tournament.
+- Inputs: Tournament ID.
+- Outputs: Sorted array of teams and their stats.
+- Backend APIs Used: GET `/api/leaderboard/:tournamentId`.
+- Database Operations Used: TeamTournament.find().populate('team').sort({ points: -1 }).
+
+9. CRUD OPERATIONS
+1. Users
+- CREATE: Endpoint: `POST /api/auth/register`. Input: name, email, password, role. Output: token, user object.
+- READ: Endpoint: `POST /api/auth/login`. Logic: verify email/password, return token.
+
+2. Tournaments
+- CREATE: Endpoint: `POST /api/tournaments`. Input: Tournament schema fields. Output: Created tournament object.
+- READ: Endpoint: `GET /api/tournaments`. Logic: Return all tournaments (optionally filtered).
+- UPDATE: Endpoint: `PUT /api/tournaments/:id`. Logic: Update details or status.
+- DELETE: Endpoint: `DELETE /api/tournaments/:id`. Logic: Remove tournament and cascade delete related matches.
+
+3. Teams
+- CREATE: Endpoint: `POST /api/teams`. Input: Team schema fields. Output: Created team object.
+- READ: Endpoint: `GET /api/teams`. Logic: Return teams belonging to the logged-in captain, or all if admin.
+- UPDATE: Endpoint: `PUT /api/teams/:id`. Logic: Add/remove players from roster.
+- DELETE: Endpoint: `DELETE /api/teams/:id`. Logic: Remove team.
+
+4. Matches
+- CREATE: Endpoint: `POST /api/matches`. Input: teamA, teamB, tournament, date, venue. Output: Match object.
+- READ: Endpoint: `GET /api/matches`. Logic: Return matches, populated with team names.
+- UPDATE: Endpoint: `PUT /api/matches/:id`. Logic: Update scores, calculate winner, change status to 'completed'.
+- DELETE: Endpoint: `DELETE /api/matches/:id`. Logic: Remove match.
+
+5. TeamTournaments (Enrollments)
+- CREATE: Endpoint: `POST /api/team-tournaments`. Input: teamId, tournamentId.
+- READ: Endpoint: `GET /api/team-tournaments`.
+- UPDATE: Endpoint: `PUT /api/team-tournaments/:id`. Update status or statistics.
+- DELETE: Endpoint: `DELETE /api/team-tournaments/:id`.
+
+JOIN / AGGREGATION OPERATIONS
+- Leaderboard Aggregation: When fetching the leaderboard, the system queries the `TeamTournament` collection based on the `tournament` ObjectId. It uses Mongoose `.populate('team', 'name')` which performs an underlying MongoDB `$lookup` to join the `Team` collection, bringing in the team's name for display alongside their points, wins, and losses.
+- Match Population: When fetching matches, `.populate('teamA teamB tournament')` is used to join team and tournament names rather than just returning raw ObjectIds to the frontend.
+
+10. API DOCUMENTATION
+1. Route: `POST /api/auth/register`
+- Method: POST
+- Request Body: { "name": "...", "email": "...", "password": "...", "role": "admin|captain" }
+- Response Body: { "token": "jwt_string", "user": { "_id", "name", "email", "role" } }
+- Authentication Required?: No
+- Purpose: Register a new user.
+
+2. Route: `POST /api/auth/login`
+- Method: POST
+- Request Body: { "email": "...", "password": "..." }
+- Response Body: { "token": "jwt_string", "user": { ... } }
+- Authentication Required?: No
+- Purpose: Authenticate user and receive JWT.
+
+3. Route: `GET /api/tournaments`
+- Method: GET
+- Request Body: None
+- Response Body: [ { tournament objects... } ]
+- Authentication Required?: Yes
+- Purpose: Fetch available tournaments.
+
+4. Route: `POST /api/tournaments`
+- Method: POST
+- Request Body: { "name": "...", "sport": "...", "startDate": "...", "endDate": "..." }
+- Response Body: { new tournament object }
+- Authentication Required?: Yes (Admin only)
+- Purpose: Create a new tournament event.
+
+5. Route: `GET /api/matches`
+- Method: GET
+- Request Body: None
+- Response Body: [ { match objects populated with team data } ]
+- Authentication Required?: Yes
+- Purpose: Retrieve match schedules.
+
+6. Route: `PUT /api/matches/:id`
+- Method: PUT
+- Request Body: { "scoreA": 2, "scoreB": 1, "status": "completed" }
+- Response Body: { updated match object }
+- Authentication Required?: Yes (Admin only)
+- Purpose: Update match results and finalize scores.
+
+7. Route: `GET /api/leaderboard/:tournamentId`
+- Method: GET
+- Request Body: None
+- Response Body: [ { team stats objects ordered by points } ]
+- Authentication Required?: Yes
+- Purpose: Retrieve calculated standings for a tournament.
+
+11. SECURITY FEATURES
+Authentication: Implemented using JSON Web Tokens (JWT). Tokens are issued upon login and must be passed in the `Authorization` header as a Bearer token.
+Authorization: Role-based middleware intercepts requests. Captains cannot access POST/PUT routes for Tournaments or Matches; Admins cannot create Teams as Captains.
+Password Encryption: `bcryptjs` is used in a Mongoose pre-save hook to hash passwords with a salt factor of 10. Plain text passwords are never stored.
+Input Validation: Handled implicitly by Mongoose Schemas (required fields, enums, unique constraints).
+Session Handling: Stateless architecture. The server does not store sessions; state is maintained via the client storing the JWT.
+Rate Limiting: Can be implemented via `express-rate-limit` to prevent brute force login attempts.
+Error Handling: Centralized try-catch blocks in async controllers. Standardized JSON error responses `{ message: "Error details" }` are sent back to prevent stack trace leaks.
+
+12. IMPLEMENTATION DETAILS
+Frontend Folder Structure:
+`/src`
+  `/assets` (Images, global CSS)
+  `/components` (Reusable UI like Navbar, Sidebar, Modals)
+  `/context` (React Context providers for global state)
+  `/layouts` (MainLayout wrapper)
+  `/pages` (View components for routes)
+  `/services` (Axios configuration and API calls)
+
+Backend Folder Structure:
+`/backend`
+  `/config` (DB connection)
+  `/controllers` (Business logic functions)
+  `/middleware` (Auth and role verification)
+  `/models` (Mongoose schemas)
+  `/routes` (Express router definitions)
+  `server.js` (Entry point)
+
+Database Structure:
+Hosted on MongoDB, utilizing multiple interconnected collections mapped via Mongoose ObjectIds to maintain relational integrity in a NoSQL environment.
+
+Deployment Structure:
+The frontend (React/Vite app) is compiled to static assets and deployed to a CDN-backed hosting provider (e.g., Vercel, Netlify). The backend (Node.js/Express) is deployed to a cloud platform (e.g., Render, Heroku, AWS) connected to a managed MongoDB instance (MongoDB Atlas).
+
+Important Code Logic:
+- Password Hashing: Implemented via `userSchema.pre('save', ...)` to ensure passwords are automatically hashed even if updated elsewhere in the code.
+- Score Updating: When a match is marked 'completed', the match controller must also find the relevant `TeamTournament` records for both teams and increment their `wins`, `losses`, `draws`, and `points` based on the score outcome to keep the leaderboard accurate.
+
+13. TESTING & VALIDATION
+Test Cases:
+1. Test: User Registration. Expected: User record created, hashed password in DB, JWT returned. Actual: Matches expected.
+2. Test: Admin unauthorized access. A captain attempts to POST to `/api/tournaments`. Expected: 403 Forbidden response. Actual: Middleware blocks request.
+3. Test: Leaderboard calculation. Team A beats Team B. Expected: Team A gets 3 points and 1 win; Team B gets 0 points and 1 loss. Actual: TeamTournament records update correctly upon match completion.
+4. Test: UI Navigation. Expected: Clicking 'Matches' transitions view smoothly without full page reload. Actual: React Router DOM handles routing efficiently.
+Validation Checks: Mongoose validates email formatting, required fields, and ensures roles are strictly 'admin' or 'captain'.
+
+14. PROJECT RESULTS
+Achieved Objectives: Successfully delivered a full-stack, secure application that automates tournament and team management with distinct role functionalities.
+Performance: Fast client-side routing, responsive UI, and quick database queries optimized by indexed fields.
+User Benefits: Organizers save hours previously spent on manual scheduling. Teams have instant access to real-time standings and upcoming match locations.
+Screens Implemented:
+1. Login/Register Screen: Purpose: Authentication. Components: Auth Form. APIs: `/auth/login`, `/auth/register`.
+2. Dashboard Screen: Purpose: Overview of stats. Components: Stat Cards, GSAP animations. APIs: Summary data.
+3. Tournaments Screen: Purpose: View events. Components: Tournament Cards, Create Modal (Admin). APIs: `/tournaments`.
+4. Teams Screen: Purpose: Roster management. Components: Team List, Add Player Form. APIs: `/teams`.
+5. Matches Screen: Purpose: View schedule/scores. Components: Match List, Score Update Modal (Admin). APIs: `/matches`.
+6. Leaderboard Screen: Purpose: Standings. Components: Data Table. APIs: `/leaderboard`.
+7. AdminPanel Screen: Purpose: Centralized admin control. Components: Management tabs.
+
+15. FUTURE ENHANCEMENTS
+1. Integrate WebSockets (Socket.io) for real-time live score updates without refreshing.
+2. Implement automated visual tournament bracket generation for knockout formats.
+3. Add a dedicated Referee/Umpire role to input live scores from the field via a mobile-optimized view.
+4. Track granular player statistics (goals, assists, fouls, red/yellow cards).
+5. Implement email or SMS notifications for upcoming match alerts or schedule changes.
+6. Integrate a payment gateway (Stripe/Razorpay) to collect team registration fees.
+7. Add social media OAuth login (Google, Facebook).
+8. Develop a native mobile application version using React Native.
+9. Implement an audit logging system tracking all admin actions for accountability.
+10. Allow exporting of tournament results and leaderboards to PDF and Excel formats.
+
+16. QUICK PROJECT SUMMARY
+Frontend: React 19, Tailwind CSS 4, GSAP, Vite
+Backend: Node.js, Express.js
+Database: MongoDB (with Mongoose)
+Main Features: Role-Based Dashboards, Tournament & Team CRUD, Match Scheduling, Real-time Leaderboards
+Number of APIs: Approximately 20+ RESTful endpoints
+Number of Modules: 7 primary modules (Auth, User, Tournament, Team, Enrollment, Match, Leaderboard)
+Database Tables/Collections: 5 (User, Tournament, Team, Match, TeamTournament)
+Authentication Method: JSON Web Tokens (JWT)
+Deployment Method: Cloud deployment separating frontend static hosting and backend API hosting.
