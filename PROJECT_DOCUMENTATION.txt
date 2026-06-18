@@ -11,7 +11,7 @@ Main Objectives:
 - Ensure real-time, dynamic calculation of team standings on a leaderboard.
 - Deliver a modern, visually engaging, and responsive User Interface.
 Expected Outcomes: A fully functional web platform that significantly reduces the administrative overhead of managing sports events, improves communication, and provides an engaging experience for teams participating in tournaments.
-Project Features Summary: Role-Based Access Control, Tournament Management (CRUD), Team & Roster Management, Tournament Registration, Match Scheduling & Scoring, Automated Leaderboard, Modern UI with GSAP animations, Secure JWT Authentication.
+Project Features Summary: Role-Based Access Control, Admin Command Center, Tournament Management (CRUD), Team & Roster Management, Tournament Registration, Match Scheduling & Scoring, Automated Leaderboard, Modern UI with GSAP animations, Secure JWT Authentication.
 
 2. LITERATURE REVIEW INFORMATION
 Existing systems/platforms similar to this project: Toornament, Challonge, IMLeagues.
@@ -134,7 +134,7 @@ Password Hashing: bcryptjs used to securely salt and hash user passwords before 
 
 6. SYSTEM ARCHITECTURE
 Presentation Layer
-- All frontend pages: Login, Register, Dashboard, Matches, Teams, Tournaments, AdminPanel, Leaderboard, Unauthorized.
+- All frontend pages: Login, Register, Dashboard, Matches, Teams, Tournaments, AdminPanel, AdminCommandCenter, Leaderboard, Unauthorized.
 - UI responsibilities: Render dynamic data, handle user forms, manage client-side state, animate transitions using GSAP, and handle API responses/errors gracefully.
 
 Application Layer
@@ -414,6 +414,7 @@ Screens Implemented:
 5. Matches Screen: Purpose: View schedule/scores. Components: Match List, Score Update Modal (Admin). APIs: `/matches`.
 6. Leaderboard Screen: Purpose: Standings. Components: Data Table. APIs: `/leaderboard`.
 7. AdminPanel Screen: Purpose: Centralized admin control. Components: Management tabs.
+8. Admin Command Center Screen: Purpose: Single Control Hub for live analytics and tournament progress. Components: Stat Cards, GSAP animations, Quick Actions. APIs: Multiple (teams, matches, leaderboard).
 
 15. FUTURE ENHANCEMENTS
 1. Integrate WebSockets (Socket.io) for real-time live score updates without refreshing.
@@ -431,7 +432,7 @@ Screens Implemented:
 Frontend: React 19, Tailwind CSS 4, GSAP, Vite
 Backend: Node.js, Express.js
 Database: MongoDB (with Mongoose)
-Main Features: Role-Based Dashboards, Tournament & Team CRUD, Match Scheduling, Real-time Leaderboards
+Main Features: Role-Based Dashboards, Admin Command Center, Tournament & Team CRUD, Match Scheduling, Real-time Leaderboards
 Number of APIs: Approximately 20+ RESTful endpoints
 Number of Modules: 7 primary modules (Auth, User, Tournament, Team, Enrollment, Match, Leaderboard)
 Database Tables/Collections: 5 (User, Tournament, Team, Match, TeamTournament)

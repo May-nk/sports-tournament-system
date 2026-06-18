@@ -62,6 +62,7 @@ const ICONS = {
 const NAV_LINKS = {
   admin: [
     { to: '/',            label: 'Dashboard',     icon: ICONS.Home },
+    { to: '/command-center', label: 'Command Center', icon: ICONS.Zap },
     { to: '/tournaments', label: 'Tournaments',   icon: ICONS.Trophy },
     { to: '/admin',       label: 'Approve Teams', icon: ICONS.Check },
     { to: '/matches',     label: 'Matches',       icon: ICONS.Zap },
@@ -90,13 +91,13 @@ const TournamentSelector = () => {
   }, []);
 
   const filtered = tournaments.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase())
+    (t?.name || '').toLowerCase().includes(search.toLowerCase())
   );
 
   const STATUS_DOT = {
     upcoming:  'bg-sky-400',
     ongoing:   'bg-emerald-400',
-    completed: 'bg-app-faint',
+    completed: 'bg-sports-muted',
   };
 
   return (
@@ -107,18 +108,18 @@ const TournamentSelector = () => {
         className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm
           border transition-all duration-200 text-left
           ${open
-            ? 'bg-purple-600/10 border-purple-500/30 text-white'
-            : 'bg-[#0F172A] border-[#1F2937] text-gray-400 hover:bg-[#1F2937] hover:text-white'}`}
+            ? 'bg-sports-accent/10 border-sports-accent/30 text-white'
+            : 'bg-sports-card border-sports-border text-sports-muted hover:bg-sports-border hover:text-white'}`}
       >
         {loading ? (
-          <svg className="w-3.5 h-3.5 animate-spin text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 animate-spin text-sports-muted shrink-0" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
         ) : (
-          <span className="shrink-0 text-gray-400">{ICONS.Trophy}</span>
+          <span className="shrink-0 text-sports-muted">{ICONS.Trophy}</span>
         )}
-        <span className="flex-1 truncate text-xs font-medium tracking-wide">
+        <span className="flex-1 truncate text-xs font-bold tracking-wide uppercase">
           {selected ? selected.name : 'Select Tournament'}
         </span>
         <svg className={`w-3.5 h-3.5 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
@@ -130,18 +131,18 @@ const TournamentSelector = () => {
       {/* Dropdown panel */}
       {open && (
         <div className="absolute left-4 right-4 top-full mt-1 z-50
-          bg-[#0F172A] border border-[#1F2937] rounded-md shadow-xl overflow-hidden">
+          bg-sports-card border border-sports-border rounded-md shadow-xl overflow-hidden">
 
           {/* Search */}
-          <div className="p-2 border-b border-[#1F2937]">
+          <div className="p-2 border-b border-sports-border">
             <input
               autoFocus
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search…"
-              className="w-full px-3 py-1.5 rounded-md bg-[#1F2937] border border-transparent
-                text-white text-xs placeholder-gray-500 outline-none
-                focus:border-purple-500 transition-all font-medium"
+              className="w-full px-3 py-1.5 rounded-md bg-sports-bg border border-transparent
+                text-white text-xs placeholder-sports-muted outline-none
+                focus:border-sports-accent transition-all font-medium"
             />
           </div>
 
@@ -152,14 +153,14 @@ const TournamentSelector = () => {
               <button
                 onClick={() => { selectTournament(null); setOpen(false); setSearch(''); }}
                 className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium
-                  transition-colors text-gray-400 hover:bg-[#1F2937] hover:text-white`}
+                  transition-colors text-sports-muted hover:bg-sports-border hover:text-white`}
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"></path></svg> Clear selection
               </button>
             </li>
 
             {filtered.length === 0 && (
-              <li className="px-3 py-4 text-xs text-gray-500 font-medium text-center">
+              <li className="px-3 py-4 text-xs text-sports-muted font-medium text-center">
                 No tournaments found
               </li>
             )}
@@ -171,13 +172,13 @@ const TournamentSelector = () => {
                   className={`w-full flex items-center gap-2.5 px-3 py-2 text-left
                     transition-colors text-sm font-medium
                     ${selected?._id === t._id
-                      ? 'bg-purple-600/10 text-white'
-                      : 'text-gray-400 hover:bg-[#1F2937] hover:text-white'}`}
+                      ? 'bg-sports-accent/10 text-white'
+                      : 'text-sports-muted hover:bg-sports-border hover:text-white'}`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[t.status] ?? 'bg-gray-500'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[t.status] ?? 'bg-sports-muted'}`} />
                   <span className="flex-1 truncate text-xs">{t.name}</span>
                   {selected?._id === t._id && (
-                    <svg className="w-3.5 h-3.5 text-purple-400 shrink-0" fill="none" viewBox="0 0 24 24"
+                    <svg className="w-3.5 h-3.5 text-sports-accent shrink-0" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -198,15 +199,15 @@ const NavItem = ({ to, label, icon, isExact }) => (
     to={to}
     end={isExact}
     className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-2 rounded-md text-sm transition-all duration-150 border-l-4 ${
+      `flex items-center gap-3 px-4 py-3 rounded-md text-sm transition-all duration-150 border-l-4 font-semibold ${
          isActive
-           ? 'bg-purple-600/10 text-white border-purple-500'
-           : 'text-gray-400 hover:text-white hover:bg-[#1F2937] border-transparent'
+           ? 'bg-sports-accent/10 text-white border-sports-accent'
+           : 'text-sports-muted hover:text-white hover:bg-sports-card border-transparent'
        }`
     }
   >
     <span className="shrink-0">{icon}</span>
-    <span className="font-medium">{label}</span>
+    <span>{label}</span>
   </NavLink>
 );
 
@@ -221,19 +222,19 @@ const MainLayout = () => {
   const handleLogout = () => { logout(); navigate('/login', { replace: true }); };
 
   return (
-    <div className="flex min-h-screen bg-app-bg text-gray-100 pl-64">
+    <div className="flex min-h-screen bg-sports-bg text-sports-text pl-64">
 
       {/* ── Sidebar ─────────────────────────────────────────────── */}
-      <aside className="w-64 bg-[#0F172A] border-r border-[#1F2937] h-screen fixed left-0 top-0 flex flex-col text-sm z-40">
+      <aside className="w-64 bg-sports-card border-r border-sports-border h-screen fixed left-0 top-0 flex flex-col text-sm z-40">
 
         {/* Brand */}
         <div className="px-6 pt-6 mb-8 flex items-center gap-3">
-          <div className="w-6 h-6 rounded-md bg-purple-600/20 border border-purple-500/30 flex items-center justify-center shrink-0">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-purple-400">
+          <div className="w-8 h-8 rounded bg-sports-accent flex items-center justify-center shrink-0">
+            <svg width="18" height="18" fill="none" stroke="#fff" strokeWidth="3" className="text-white">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
           </div>
-          <h2 className="text-lg font-semibold tracking-tight text-white">
+          <h2 className="text-xl font-bold tracking-tight text-white uppercase">
             SportsSys
           </h2>
         </div>
@@ -242,8 +243,8 @@ const MainLayout = () => {
         <TournamentSelector />
         
         {selected && (
-          <div className="mx-4 mb-4 px-3 py-2 rounded-md bg-[#1F2937]/50 border border-[#1F2937]">
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+          <div className="mx-4 mb-4 px-3 py-2 rounded-md bg-sports-bg border border-sports-border">
+            <p className="text-[10px] text-sports-muted uppercase tracking-wider font-bold">
               {selected.sport} · <span className="capitalize">{selected.format}</span>
             </p>
           </div>
@@ -251,8 +252,8 @@ const MainLayout = () => {
 
         {/* Nav */}
         <div className="flex flex-col flex-1 px-4 overflow-y-auto mt-2">
-          <p className="text-xs uppercase text-gray-500 tracking-wider mb-2 px-1 font-semibold">
-            {role === 'admin' ? 'ADMIN' : 'CAPTAIN'}
+          <p className="text-[10px] uppercase text-sports-muted tracking-widest mb-3 px-1 font-bold">
+            {role === 'admin' ? 'Administration' : 'Captain Tools'}
           </p>
           <nav className="flex flex-col gap-1">
             {links.map(({ to, label, icon }) => (
@@ -262,24 +263,24 @@ const MainLayout = () => {
         </div>
 
         {/* User panel */}
-        <div className="p-4 border-t border-[#1F2937] mt-auto relative">
+        <div className="p-4 border-t border-sports-border mt-auto relative">
           <div className="flex items-center justify-between mb-4 px-2">
             <div className="min-w-0 pr-2">
-              <p className="text-sm font-medium text-white truncate">
+              <p className="text-sm font-bold text-white truncate">
                 {user?.name ?? user?.email ?? 'Unknown'}
               </p>
             </div>
-            <span className="px-2 py-1 rounded bg-[#1F2937] text-gray-300 text-xs uppercase tracking-widest font-semibold shrink-0">
+            <span className="px-2 py-1 rounded bg-sports-border text-sports-text text-[10px] uppercase tracking-widest font-bold shrink-0">
               {role}
             </span>
           </div>
           <button
             id="logout-btn"
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium
-              text-gray-400 hover:bg-[#1F2937] hover:text-white transition-all duration-200"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold uppercase tracking-wide
+              text-sports-muted hover:bg-sports-border hover:text-white transition-all duration-200"
           >
-            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round"
                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
             </svg>
@@ -289,8 +290,8 @@ const MainLayout = () => {
       </aside>
 
       {/* ── Main content ────────────────────────────────────────── */}
-      <main className="flex-1 overflow-y-auto p-10 bg-app-bg text-white">
-        <div className="max-w-[1400px] mx-auto h-full">
+      <main className="flex-1 overflow-y-auto p-10 bg-sports-bg text-sports-text">
+        <div className="max-w-[1600px] mx-auto h-full">
           <Outlet />
         </div>
       </main>

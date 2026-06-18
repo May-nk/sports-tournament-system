@@ -18,6 +18,7 @@ This application provides a centralized platform that automates and organizes to
 
 - **Role-Based Access Control:** Secure access for `admin` (organizers) and `captain` (team managers).
 - **Tournament Management:** Admins can create, view, and manage multiple tournaments.
+- **Admin Command Center:** A central control hub providing live analytics, tournament progress, quick actions, and automated insights.
 - **Team & Roster Management:** Captains can create teams, add players, and manage their team details.
 - **Tournament Registration:** Teams can enroll in upcoming tournaments.
 - **Match Scheduling & Scoring:** Admins can schedule matches between enrolled teams, update match status, and record scores.
@@ -74,7 +75,7 @@ sports-tournament-system/
     │   ├── components/       # Reusable UI components and route guards
     │   ├── context/          # React Context (TournamentContext)
     │   ├── layouts/          # Page layouts (MainLayout)
-    │   ├── pages/            # Application views (Dashboard, Matches, Teams, etc.)
+    │   ├── pages/            # Application views (Dashboard, AdminCommandCenter, Matches, Teams, etc.)
     │   ├── services/         # API integration services (Axios instances)
     │   ├── App.jsx           # Main React component and Router setup
     │   └── main.jsx          # React entry point
@@ -161,7 +162,7 @@ The backend exposes the following RESTful API endpoints:
 
 ## Usage Examples
 
-1. **Admin Workflow:** Log in as an admin → Create a new Tournament → Navigate to Admin Panel → Schedule matches between registered teams → Update match scores as games conclude.
+1. **Admin Workflow:** Log in as an admin → Create a new Tournament → Access the Admin Command Center for a comprehensive overview → Use Quick Actions to schedule matches or update scores → Track live analytics.
 2. **Captain Workflow:** Log in as a captain → Create your Team and add players → View available Tournaments → Register your team for a tournament → Track your upcoming matches and leaderboard standing.
 
 ## Security Considerations

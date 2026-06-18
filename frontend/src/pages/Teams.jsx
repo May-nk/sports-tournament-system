@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { getTeams, createTeam, addPlayers, editPlayer, removePlayer } from '../services/teamService';
 import { getRole, getToken } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
 
-const INPUT_CLS = `w-full px-4 py-2 rounded-md bg-[#0F172A] border border-[#1F2937]
-  text-white placeholder-gray-600 text-sm outline-none
-  focus:border-purple-500 transition duration-200`;
+const INPUT_CLS = `w-full px-4 py-3 rounded-none bg-sports-bg border border-sports-border
+  text-white placeholder-sports-muted/50 text-sm font-bold uppercase outline-none
+  focus:border-sports-accent transition duration-200`;
 
-const LABEL_CLS = `block text-xs font-medium text-gray-500 mb-2`;
+const LABEL_CLS = `block text-[10px] font-black uppercase tracking-widest text-sports-muted mb-2`;
 
 /* ─── Team Card ────────────────────────────────────────────────────── */
 const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }) => {
+  const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
   const [addName, setAddName] = useState('');
   const [addAge, setAddAge] = useState('');
@@ -70,24 +72,29 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
   };
 
   return (
-    <div className="rounded-xl border border-[#1F2937] bg-[#111827] p-6 text-left
-      hover:border-purple-500/40 hover:scale-[1.01] transition duration-200 flex flex-col h-full">
+    <div className="rounded-none border border-sports-border bg-sports-card p-6 text-left
+      hover:border-sports-accent/40 transition duration-200 flex flex-col h-full">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-6">
         <div>
-          <h3 className="text-sm font-medium text-white">{team.name}</h3>
-          <p className="text-xs text-gray-400 mt-1">
+          <h3 
+            className="text-xl font-black uppercase tracking-wide text-white cursor-pointer hover:text-sports-accent transition-colors"
+            onClick={() => navigate(`/team/${team._id}`)}
+          >
+            {team.name}
+          </h3>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-sports-muted mt-2">
             {team.players?.length ?? 0} player{(team.players?.length ?? 0) !== 1 ? 's' : ''}
           </p>
         </div>
         {isCaptain && (
           <button
             onClick={() => { setOpenAdd((v) => !v); cancelEdit(); }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition duration-200 border whitespace-nowrap
+            className={`px-4 py-2 rounded-none text-[10px] uppercase font-black tracking-widest transition duration-200 border whitespace-nowrap
               ${openAdd
-                ? 'bg-[#0F172A] text-gray-400 border-[#1F2937]'
-                : 'bg-[#111827] hover:bg-[#1F2937] text-white border-[#1F2937]'}`}
+                ? 'bg-sports-bg text-sports-muted border-sports-border'
+                : 'bg-sports-card hover:bg-sports-bg text-white border-sports-border hover:border-sports-accent'}`}
           >
             {openAdd ? 'Cancel' : 'Add Player'}
           </button>
@@ -96,40 +103,40 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
 
       {/* Players list */}
       {team.players?.length > 0 ? (
-        <div className="flex-1 flex flex-col gap-3 pt-4 border-t border-[#1F2937]">
+        <div className="flex-1 flex flex-col gap-4 pt-6 border-t border-sports-border">
           {team.players.map((p, i) => (
-            <div key={p._id || i} className="flex flex-col gap-2 p-3 rounded-lg bg-[#0F172A] border border-[#1F2937]">
+            <div key={p._id || i} className="flex flex-col gap-3 p-4 rounded-none bg-sports-bg border border-sports-border">
               {editingPlayerId === p._id ? (
                 // Edit Form
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   <input
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
                     placeholder="Name"
-                    className="w-full px-3 py-1.5 rounded bg-[#111827] border border-[#1F2937] text-white text-xs outline-none focus:border-purple-500"
+                    className="w-full px-4 py-3 rounded-none bg-sports-card border border-sports-border text-white text-xs uppercase font-bold outline-none focus:border-sports-accent"
                   />
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <input
                       type="number"
                       value={editAge}
                       onChange={(e) => setEditAge(e.target.value)}
                       placeholder="Age"
-                      className="w-1/3 px-3 py-1.5 rounded bg-[#111827] border border-[#1F2937] text-white text-xs outline-none focus:border-purple-500"
+                      className="w-1/3 px-4 py-3 rounded-none bg-sports-card border border-sports-border text-white text-xs uppercase font-bold outline-none focus:border-sports-accent"
                     />
                     <input
                       type="text"
                       value={editPosition}
                       onChange={(e) => setEditPosition(e.target.value)}
                       placeholder="Position"
-                      className="w-2/3 px-3 py-1.5 rounded bg-[#111827] border border-[#1F2937] text-white text-xs outline-none focus:border-purple-500"
+                      className="w-2/3 px-4 py-3 rounded-none bg-sports-card border border-sports-border text-white text-xs uppercase font-bold outline-none focus:border-sports-accent"
                     />
                   </div>
-                  <div className="flex justify-end gap-2 mt-1">
+                  <div className="flex justify-end gap-3 mt-2">
                     <button
                       type="button"
                       onClick={cancelEdit}
-                      className="px-2 py-1 text-xs text-gray-400 hover:text-white"
+                      className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-sports-muted hover:text-white"
                     >
                       Cancel
                     </button>
@@ -137,7 +144,7 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
                       type="button"
                       onClick={() => submitEdit(p._id)}
                       disabled={busy}
-                      className="px-3 py-1 rounded bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium disabled:opacity-50"
+                      className="px-4 py-2 rounded-none bg-sports-accent hover:bg-sports-accentHover text-white text-[10px] font-black uppercase tracking-widest disabled:opacity-50"
                     >
                       Save
                     </button>
@@ -145,13 +152,13 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
                 </div>
               ) : deletingPlayerId === p._id ? (
                 // Delete Confirmation
-                <div className="flex flex-col items-center gap-2 py-1">
-                  <p className="text-xs text-gray-300">Are you sure you want to remove <span className="text-white font-medium">{p.name}</span>?</p>
-                  <div className="flex gap-2">
+                <div className="flex flex-col items-center gap-4 py-3">
+                  <p className="text-xs uppercase font-bold tracking-widest text-sports-text">Are you sure you want to remove <span className="text-white font-black">{p.name}</span>?</p>
+                  <div className="flex gap-3">
                     <button
                       type="button"
                       onClick={() => setDeletingPlayerId(null)}
-                      className="px-3 py-1 text-xs text-gray-400 hover:text-white"
+                      className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-sports-muted hover:text-white"
                     >
                       Cancel
                     </button>
@@ -159,7 +166,7 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
                       type="button"
                       onClick={() => confirmDelete(p._id)}
                       disabled={busy}
-                      className="px-3 py-1 rounded bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/30 text-xs font-medium transition duration-200 disabled:opacity-50"
+                      className="px-4 py-2 rounded-none bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/30 text-[10px] font-black uppercase tracking-widest transition duration-200 disabled:opacity-50"
                     >
                       Yes, Remove
                     </button>
@@ -167,21 +174,21 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
                 </div>
               ) : (
                 // Display Player
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-white">{p.name || `Player ${i + 1}`}</span>
-                    <div className="flex gap-2 text-xs text-gray-500 mt-0.5">
+                    <span className="text-base font-black uppercase tracking-wide text-white">{p.name || `Player ${i + 1}`}</span>
+                    <div className="flex gap-3 text-[10px] font-bold uppercase tracking-widest text-sports-muted mt-1">
                       {p.position && <span>{p.position}</span>}
                       {p.position && p.age && <span>•</span>}
-                      {p.age && <span>{p.age} y/o</span>}
+                      {p.age && <span>{p.age} Y/O</span>}
                     </div>
                   </div>
                   {isCaptain && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <button
                         type="button"
                         onClick={() => startEdit(p)}
-                        className="px-2 py-1 rounded text-xs font-medium text-gray-400 border border-transparent hover:border-[#1F2937] hover:bg-[#111827] hover:text-white transition duration-200"
+                        className="px-3 py-1.5 rounded-none text-[10px] uppercase font-black tracking-widest text-sports-muted border border-transparent hover:border-sports-border hover:bg-sports-card hover:text-white transition duration-200"
                       >
                         Edit
                       </button>
@@ -191,7 +198,7 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
                           console.log("Initial Delete clicked, player:", p);
                           setDeletingPlayerId(p._id);
                         }}
-                        className="px-2 py-1 rounded text-xs font-medium text-red-500/70 border border-transparent hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500 transition duration-200"
+                        className="px-3 py-1.5 rounded-none text-[10px] uppercase font-black tracking-widest text-red-500/70 border border-transparent hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500 transition duration-200"
                       >
                         Delete
                       </button>
@@ -203,14 +210,14 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
           ))}
         </div>
       ) : (
-        <div className="flex-1 mt-4 border-t border-[#1F2937] pt-4 text-xs text-gray-500">
+        <div className="flex-1 mt-6 border-t border-sports-border pt-6 text-[10px] font-bold uppercase tracking-widest text-sports-muted">
           No players added yet.
         </div>
       )}
 
       {/* Add player form */}
       {openAdd && isCaptain && (
-        <div className="mt-4 pt-4 border-t border-[#1F2937] flex flex-col gap-3">
+        <div className="mt-6 pt-6 border-t border-sports-border flex flex-col gap-4">
           <input
             type="text"
             value={addName}
@@ -218,7 +225,7 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
             placeholder="Player name"
             className={INPUT_CLS}
           />
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <input
               type="number"
               value={addAge}
@@ -238,8 +245,8 @@ const TeamCard = ({ team, isCaptain, onAddPlayer, onEditPlayer, onRemovePlayer }
           <button
             onClick={submitAdd}
             disabled={busy || !addName.trim() || !addAge || !addPosition.trim()}
-            className="w-full px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-500
-              text-white text-sm font-medium transition duration-200 disabled:opacity-50"
+            className="w-full px-6 py-4 rounded-none bg-sports-accent hover:bg-sports-accentHover
+              text-white text-[10px] uppercase tracking-widest font-black transition duration-200 disabled:opacity-50 mt-2"
           >
             {busy ? 'Adding...' : 'Add Player'}
           </button>
@@ -364,21 +371,21 @@ const Teams = () => {
   };
 
   return (
-    <div className="text-white pb-10 text-left">
+    <div className="text-white pb-12 font-sans max-w-[1600px] mx-auto text-left">
 
       {/* Toast */}
       {toast && (
-        <div className="fixed top-4 right-4 z-50 px-4 py-2 rounded border border-[#1F2937] bg-[#111827] text-white text-sm font-medium shadow-lg transition-all duration-300">
+        <div className="fixed top-4 right-4 z-50 px-6 py-4 rounded-none border border-sports-border bg-sports-bg text-sports-accent text-[10px] uppercase font-black tracking-widest shadow-2xl transition-all duration-300">
           {toast}
         </div>
       )}
 
       {/* Header */}
-      <div className="mb-10 border-b border-[#1F2937] pb-6">
-        <h1 className="text-xl font-semibold tracking-tight text-white mb-2">
+      <div className="mb-10 border-b border-sports-border pb-6">
+        <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
           {isCaptain ? 'My Team' : 'All Teams'}
         </h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-xs font-bold uppercase tracking-widest text-sports-muted">
           {isCaptain
             ? 'Create your team and add players to your squad.'
             : 'Overview of all registered teams.'}
@@ -387,11 +394,11 @@ const Teams = () => {
 
       {/* Create Team — captain only */}
       {isCaptain && (
-        <div className="mb-10 rounded-xl border border-[#1F2937] bg-[#111827] p-6">
-          <h2 className="text-xl font-semibold text-white mb-6">
+        <div className="mb-12 rounded-none border border-sports-border bg-sports-card p-8">
+          <h2 className="text-xl font-black uppercase text-white mb-8">
             Create New Team
           </h2>
-          <form onSubmit={handleCreate} className="flex gap-4">
+          <form onSubmit={handleCreate} className="flex gap-6">
             <div className="flex-1">
               <label className={LABEL_CLS}>Team Name</label>
               <input
@@ -406,9 +413,9 @@ const Teams = () => {
               <button
                 type="submit"
                 disabled={creating || !teamName.trim()}
-                className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-500
-                  text-white text-sm font-medium transition duration-200
-                  disabled:opacity-50 h-[38px] flex items-center justify-center mt-[1px]"
+                className="px-6 py-3 rounded-none bg-sports-accent hover:bg-sports-accentHover
+                  text-white text-[10px] font-black uppercase tracking-widest transition duration-200
+                  disabled:opacity-50 h-[46px] flex items-center justify-center mt-[1px]"
               >
                 {creating ? 'Creating...' : 'Create Team'}
               </button>
@@ -418,28 +425,28 @@ const Teams = () => {
       )}
 
       {/* Teams grid */}
-      <h2 className="text-xl font-semibold text-white mb-6">
-        {isCaptain ? 'Your Teams' : 'All Teams'} <span className="text-gray-500 text-sm ml-2">({teams.length})</span>
+      <h2 className="text-xl font-black uppercase text-white mb-8">
+        {isCaptain ? 'Your Teams' : 'All Teams'} <span className="text-sports-muted text-sm ml-3">({teams.length})</span>
       </h2>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-[#1F2937] bg-[#111827] p-6 animate-pulse space-y-4">
-              <div className="h-5 bg-[#1F2937] rounded w-1/2" />
-              <div className="h-3 bg-[#1F2937] rounded w-1/4" />
+            <div key={i} className="rounded-none border border-sports-border bg-sports-card p-8 animate-pulse space-y-6">
+              <div className="h-6 bg-sports-bg rounded-none w-1/2" />
+              <div className="h-4 bg-sports-bg rounded-none w-1/4" />
             </div>
           ))}
         </div>
       ) : teams.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 py-24 text-center rounded-xl border border-[#1F2937] bg-[#111827]">
-          <p className="text-white font-medium text-sm">No teams yet</p>
+        <div className="flex flex-col items-center justify-center gap-2 py-24 text-center rounded-none border border-sports-border bg-sports-card">
+          <p className="text-white font-bold uppercase tracking-widest text-sm">No teams yet</p>
           {isCaptain && (
-            <p className="text-gray-500 text-xs">Create your first team above to get started.</p>
+            <p className="text-sports-muted text-[10px] font-bold uppercase tracking-widest">Create your first team above to get started.</p>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch">
           {teams.map((team) => (
             <TeamCard
               key={team._id}
@@ -455,7 +462,7 @@ const Teams = () => {
 
       {/* Admin note */}
       {isAdmin && (
-        <p className="mt-8 text-xs text-gray-500">
+        <p className="mt-12 pt-6 border-t border-sports-border text-[10px] font-bold uppercase tracking-widest text-sports-muted">
           Team management is restricted to captains. Use Admin Panel to manage applications.
         </p>
       )}

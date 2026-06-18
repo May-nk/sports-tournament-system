@@ -15,15 +15,18 @@ import Unauthorized from './pages/Unauthorized';
 /* ── Shared pages ───────────────────────────────────────────────────── */
 import Dashboard    from './pages/Dashboard';
 import Matches      from './pages/Matches';
+import MatchDetails from './pages/MatchDetails';
+import TeamProfile  from './pages/TeamProfile';
 import Leaderboard  from './pages/Leaderboard';
 import Tournaments  from './pages/Tournaments';
 
 /* ── Role-specific pages ─────────────────────────────────────────────── */
-import AdminPanel   from './pages/AdminPanel';
-import Teams        from './pages/Teams';
+import AdminPanel         from './pages/AdminPanel';
+import AdminCommandCenter from './pages/AdminCommandCenter';
+import Teams              from './pages/Teams';
 
 const App = () => (
-  <div className="min-h-screen bg-[#0B0F1A] text-white">
+  <div className="min-h-screen bg-sports-bg text-sports-text">
     <BrowserRouter>
       <TournamentProvider>
         <Routes>
@@ -39,12 +42,15 @@ const App = () => (
 
               <Route index element={<Dashboard />} />
               <Route path="matches"     element={<Matches />} />
+              <Route path="matches/:id" element={<MatchDetails />} />
+              <Route path="team/:id"    element={<TeamProfile />} />
               <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="tournaments" element={<Tournaments />} />
 
               {/* Admin only */}
               <Route element={<RoleRoute allowedRoles={['admin']} />}>
                 <Route path="admin" element={<AdminPanel />} />
+                <Route path="command-center" element={<AdminCommandCenter />} />
               </Route>
 
               {/* Captain only */}

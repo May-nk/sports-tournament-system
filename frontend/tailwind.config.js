@@ -7,14 +7,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        app: {
-          bg: '#0B0F1A',
-          card: '#111827',
-          border: '#1F2937',
-          accent: '#9333ea', // purple-600
-          accentHover: '#a855f7', // purple-500
-          muted: '#9ca3af', // gray-400
-          faint: '#6b7280', // gray-500
+        sports: {
+          bg: '#07111F',
+          card: '#0F1B2E',
+          border: '#1B2A41',
+          accent: '#F59E0B',
+          accentHover: '#D97706',
+          text: '#F8FAFC',
+          muted: '#94A3B8',
         }
       }
     },

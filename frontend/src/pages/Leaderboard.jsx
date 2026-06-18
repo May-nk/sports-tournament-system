@@ -2,53 +2,64 @@ import { useState, useEffect } from 'react';
 import { getLeaderboardByTournament } from '../services/leaderboardService';
 import { useTournament } from '../context/TournamentContext';
 
+import { useNavigate } from 'react-router-dom';
+
 /* ── Individual team card ────────────────────────────────────────── */
 const TeamCard = ({ entry, rank }) => {
   const isFirst = rank === 1;
+  const navigate = useNavigate();
 
   // No gold/silver/bronze glows. Just textual hierarchy.
   const rankColors = {
-    1: 'text-white font-bold',
-    2: 'text-gray-300 font-semibold',
-    3: 'text-gray-400 font-semibold',
+    1: 'text-sports-accent font-black',
+    2: 'text-white font-black',
+    3: 'text-sports-muted font-bold',
   };
-  const rankStyle = rankColors[rank] || 'text-gray-400 font-semibold';
+  const rankStyle = rankColors[rank] || 'text-sports-muted font-bold';
 
   // Sorting visual: first card slightly prominent
   const borderStyle = isFirst 
-    ? 'border-purple-500/40 hover:border-purple-500/60' 
-    : 'border-[#1F2937] hover:border-purple-500/40';
+    ? 'border-sports-accent hover:border-sports-accentHover' 
+    : 'border-sports-border hover:border-sports-accent';
+
+  const handleCardClick = () => {
+    const teamId = entry.team?._id || entry.team;
+    if (teamId) {
+      navigate(`/team/${teamId}`);
+    }
+  };
 
   return (
     <div
+      onClick={handleCardClick}
       id={`team-card-rank-${rank}`}
       className={`
-        bg-[#111827] border ${borderStyle} rounded-xl p-5
-        flex flex-col gap-4 transition duration-200 
-        cursor-default select-none
+        bg-sports-card border ${borderStyle} rounded-none p-6
+        flex flex-col gap-6 transition duration-200 
+        cursor-pointer select-none hover:bg-sports-bg
       `}
     >
       {/* Top Section */}
       <div className="flex items-center justify-between">
-        <span className={`text-lg ${rankStyle}`}>
+        <span className={`text-2xl ${rankStyle}`}>
           #{rank}
         </span>
-        <h3 className="text-white font-medium text-base truncate ml-3 text-right">
+        <h3 className="text-white font-black text-xl uppercase tracking-wide truncate ml-4 text-right">
           {entry.team?.name ?? 'Unknown Team'}
         </h3>
       </div>
 
       {/* Middle Section: Stats row */}
-      <div className="flex justify-between items-center px-1 py-2 bg-[#0F172A]/50 rounded-lg border border-[transparent]">
-        <div className="text-xs text-gray-400 font-medium tracking-wide">W: <span className="text-gray-300">{entry.wins}</span></div>
-        <div className="text-xs text-gray-400 font-medium tracking-wide">L: <span className="text-gray-300">{entry.losses}</span></div>
-        <div className="text-xs text-gray-400 font-medium tracking-wide">D: <span className="text-gray-300">{entry.draws}</span></div>
+      <div className="flex justify-between items-center px-4 py-3 bg-sports-bg rounded-none border border-sports-border">
+        <div className="text-[10px] text-sports-muted font-black uppercase tracking-widest">W: <span className="text-white text-base">{entry.wins}</span></div>
+        <div className="text-[10px] text-sports-muted font-black uppercase tracking-widest">L: <span className="text-white text-base">{entry.losses}</span></div>
+        <div className="text-[10px] text-sports-muted font-black uppercase tracking-widest">D: <span className="text-white text-base">{entry.draws}</span></div>
       </div>
 
       {/* Bottom Section: Points */}
-      <div className="flex justify-between items-end mt-1 pt-3 border-t border-[#1F2937]">
-        <span className="text-xs text-gray-500 uppercase font-semibold tracking-wide">Points</span>
-        <span className="text-xl font-semibold text-white leading-none tracking-tight">{entry.points}</span>
+      <div className="flex justify-between items-end mt-2 pt-4 border-t border-sports-border">
+        <span className="text-[10px] text-sports-muted uppercase font-black tracking-widest">Points</span>
+        <span className="text-3xl font-black text-white leading-none tracking-tight">{entry.points}</span>
       </div>
     </div>
   );
@@ -56,19 +67,19 @@ const TeamCard = ({ entry, rank }) => {
 
 /* ── Loading skeleton ────────────────────────────────────────────── */
 const CardSkeleton = () => (
-  <div className="bg-[#111827] border border-[#1F2937] rounded-xl p-5 flex flex-col gap-4 animate-pulse">
+  <div className="bg-sports-card border border-sports-border rounded-none p-6 flex flex-col gap-6 animate-pulse">
     <div className="flex justify-between items-center">
-      <div className="h-6 bg-[#1F2937] rounded w-8" />
-      <div className="h-5 bg-[#1F2937] rounded w-28" />
+      <div className="h-8 bg-sports-bg rounded-none w-10" />
+      <div className="h-6 bg-sports-bg rounded-none w-32" />
     </div>
-    <div className="flex justify-between px-2 py-2 mt-1">
-      <div className="h-3 bg-[#1F2937] rounded w-6" />
-      <div className="h-3 bg-[#1F2937] rounded w-6" />
-      <div className="h-3 bg-[#1F2937] rounded w-6" />
+    <div className="flex justify-between px-4 py-3 bg-sports-bg mt-2 border border-sports-border">
+      <div className="h-4 bg-sports-card rounded-none w-8" />
+      <div className="h-4 bg-sports-card rounded-none w-8" />
+      <div className="h-4 bg-sports-card rounded-none w-8" />
     </div>
-    <div className="flex justify-between items-end mt-1 pt-4 border-t border-[#1F2937]">
-      <div className="h-3 bg-[#1F2937] rounded w-12" />
-      <div className="h-6 bg-[#1F2937] rounded w-8" />
+    <div className="flex justify-between items-end mt-2 pt-4 border-t border-sports-border">
+      <div className="h-3 bg-sports-bg rounded-none w-16" />
+      <div className="h-8 bg-sports-bg rounded-none w-12" />
     </div>
   </div>
 );
@@ -110,33 +121,33 @@ const Leaderboard = () => {
   }, [selectedTournament?._id]);
 
   return (
-    <div className="pb-10">
+    <div className="pb-12 font-sans max-w-[1600px] mx-auto text-left">
 
       {/* ── Page header ────────────────────────────────────────── */}
-      <div className="mb-8 border-b border-[#1F2937] pb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">
+      <div className="mb-10 border-b border-sports-border pb-6">
+        <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
           Leaderboard
         </h1>
         {selectedTournament ? (
-          <p className="text-gray-400 text-sm">
+          <p className="text-sports-muted text-xs font-bold uppercase tracking-widest">
             Showing standings for{' '}
-            <span className="text-gray-300 font-medium">{selectedTournament.name}</span>
+            <span className="text-white font-black">{selectedTournament.name}</span>
           </p>
         ) : (
-          <p className="text-gray-400 text-sm">Select a tournament to view standings.</p>
+          <p className="text-sports-muted text-xs font-bold uppercase tracking-widest">Select a tournament to view standings.</p>
         )}
       </div>
 
       {/* ── No tournament selected prompt ───────────────────────── */}
       {!selectedTournament && (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-gray-500 text-sm">No tournament selected.</p>
+        <div className="flex flex-col items-center justify-center py-24 text-center bg-sports-card border border-sports-border">
+          <p className="text-white font-bold uppercase tracking-widest text-sm">No tournament selected.</p>
         </div>
       )}
 
       {/* ── Loading skeletons ───────────────────────────────────── */}
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => (
             <CardSkeleton key={i} />
           ))}
@@ -145,15 +156,15 @@ const Leaderboard = () => {
 
       {/* ── Error state ────────────────────────────────────────── */}
       {!loading && error && (
-        <div id="leaderboard-error" className="flex flex-col items-center justify-center py-12">
-          <p className="text-sm text-red-400 font-medium">{error}</p>
+        <div id="leaderboard-error" className="flex flex-col items-center justify-center py-12 bg-red-900/20 border border-red-900 mt-4">
+          <p className="text-[10px] text-red-400 font-black uppercase tracking-widest">{error}</p>
         </div>
       )}
 
       {/* ── Empty state ────────────────────────────────────────── */}
       {selectedTournament && !loading && !error && hasLoaded && teams.length === 0 && (
-        <div id="leaderboard-empty" className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-gray-500 text-sm">No leaderboard data available</p>
+        <div id="leaderboard-empty" className="flex flex-col items-center justify-center py-24 text-center bg-sports-card border border-sports-border">
+          <p className="text-white font-bold uppercase tracking-widest text-sm">No leaderboard data available</p>
         </div>
       )}
 
@@ -161,7 +172,7 @@ const Leaderboard = () => {
       {!loading && teams.length > 0 && (
         <div
           id="leaderboard-grid"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
         >
           {teams.map((entry, idx) => (
             <TeamCard key={entry._id} entry={entry} rank={idx + 1} />

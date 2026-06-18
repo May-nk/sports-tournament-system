@@ -5,6 +5,7 @@ import { getMatches, updateScore } from '../services/matchService';
 import { getMyTeam } from '../services/teamService';
 import { getRole, getToken, getUser } from '../services/authService';
 import { useTournament } from '../context/TournamentContext';
+import { useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,14 +19,14 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, info) { console.error('[ErrorBoundary]', error, info); }
   render() {
     if (this.state.hasError) return (
-      <div className="min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full rounded-xl border border-red-900 bg-[#111827] p-8 text-gray-300">
-          <h2 className="text-xl font-bold mb-3 text-red-500">Render Error Caught</h2>
-          <pre className="text-xs text-red-400 bg-black/50 rounded-lg p-4 overflow-auto max-h-60 mt-4 border border-red-900/50">
+      <div className="min-h-[80vh] flex items-center justify-center p-8">
+        <div className="max-w-2xl w-full rounded-none border border-red-900 bg-sports-card p-10 text-white">
+          <h2 className="text-2xl font-black mb-4 text-red-500 uppercase tracking-tight">Render Error Caught</h2>
+          <pre className="text-xs text-red-400 bg-sports-bg rounded-none p-6 overflow-auto max-h-64 border border-red-900/50 uppercase tracking-widest font-bold">
             {String(this.state.error)}
           </pre>
           <button onClick={() => this.setState({ hasError: false, error: null })}
-            className="mt-6 px-4 py-2 rounded border border-red-900 hover:bg-red-900/20 text-xs font-semibold transition-colors">
+            className="mt-8 px-6 py-3 rounded-none border border-red-900 hover:bg-red-900/20 text-xs font-black uppercase tracking-widest transition-colors text-white">
             Try Again
           </button>
         </div>
@@ -73,16 +74,16 @@ const toArray = (data) => {
 
 /* ── Card Skeleton ─────────────────────────────────────────────────── */
 const CardSkeleton = () => (
-  <div className="bg-[#111827] border border-[#1F2937] rounded-xl p-5 flex flex-col gap-3 animate-pulse">
-    <div className="flex justify-between items-center mb-2">
-      <div className="h-4 bg-[#1F2937] rounded w-1/3" />
-      <div className="h-3 bg-[#1F2937] rounded w-6" />
-      <div className="h-4 bg-[#1F2937] rounded w-1/3" />
+  <div className="bg-sports-card border border-sports-border rounded-none p-6 flex flex-col gap-4 animate-pulse">
+    <div className="flex justify-between items-center mb-3">
+      <div className="h-5 bg-sports-bg rounded-none w-1/3" />
+      <div className="h-4 bg-sports-bg rounded-none w-8" />
+      <div className="h-5 bg-sports-bg rounded-none w-1/3" />
     </div>
-    <div className="h-4" />
-    <div className="flex justify-between items-center mt-4 border-t border-[#1F2937] pt-4">
-      <div className="h-3 bg-[#1F2937] rounded w-1/2" />
-      <div className="h-5 bg-[#1F2937] rounded w-16" />
+    <div className="h-6" />
+    <div className="flex justify-between items-center mt-5 border-t border-sports-border pt-5">
+      <div className="h-3 bg-sports-bg rounded-none w-1/2" />
+      <div className="h-6 bg-sports-bg rounded-none w-20" />
     </div>
   </div>
 );
@@ -121,62 +122,65 @@ const AdminMatchCard = ({ match, onScoreUpdate }) => {
     } finally { setSaving(false); }
   };
 
+  const navigate = useNavigate();
+
   return (
     <div id={`match-${match._id}`}
-      className="bg-[#111827] border border-[#1F2937] rounded-xl p-5 flex flex-col gap-3 transition duration-200 hover:border-purple-500/40 hover:bg-[#0F172A]">
+      onClick={() => navigate(`/matches/${match._id}`)}
+      className="bg-sports-card border border-sports-border rounded-none p-6 flex flex-col gap-4 transition duration-200 hover:border-sports-accent hover:bg-sports-bg cursor-pointer">
       
       {/* TEAM SECTION */}
-      <div className="flex justify-between items-center mb-1">
-        <div className={`text-sm ${aWins ? 'text-green-400 font-semibold' : 'text-white font-medium'}`}>{nameA}</div>
-        <div className="text-gray-500 text-xs uppercase tracking-wide">vs</div>
-        <div className={`text-sm ${bWins ? 'text-green-400 font-semibold' : 'text-white font-medium'}`}>{nameB}</div>
+      <div className="flex justify-between items-center mb-2">
+        <div className={`text-base uppercase tracking-wide truncate w-[40%] text-left ${aWins ? 'text-sports-accent font-black' : 'text-white font-black'}`}>{nameA}</div>
+        <div className="text-sports-muted text-[10px] font-black uppercase tracking-widest px-2">VS</div>
+        <div className={`text-base uppercase tracking-wide truncate w-[40%] text-right ${bWins ? 'text-sports-accent font-black' : 'text-white font-black'}`}>{nameB}</div>
       </div>
 
       {/* SCORE SECTION */}
       {done && (
-        <div className="text-center text-lg font-semibold text-white my-1">
+        <div className="text-center text-3xl font-black text-white my-2 tracking-widest">
           {match.scoreA ?? 0} - {match.scoreB ?? 0}
         </div>
       )}
 
       {/* spacer if no score */}
-      {!done && <div className="h-4"></div>}
+      {!done && <div className="h-6"></div>}
 
       {/* META INFO + STATUS BADGE */}
-      <div className="flex justify-between items-center mt-2 pt-4 border-t border-[#1F2937]">
-        <div className="text-gray-400 text-xs">
+      <div className="flex justify-between items-center mt-3 pt-5 border-t border-sports-border">
+        <div className="text-sports-muted text-[10px] font-bold uppercase tracking-widest">
           {formatDate(match.date)} • {safeStr(match.venue, 'TBD')}
         </div>
-        <div className={`px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider shrink-0 ${done ? 'bg-green-600/20 text-green-400' : 'bg-gray-700 text-gray-300'}`}>
+        <div className={`px-3 py-1 rounded-none text-[10px] uppercase font-black tracking-widest shrink-0 border ${done ? 'bg-sports-bg border-sports-accent text-sports-accent' : 'bg-sports-bg border-sports-border text-sports-muted'}`}>
           {done ? 'Completed' : 'Scheduled'}
         </div>
       </div>
 
       {/* Admin-only: Score Update Panel */}
       {!done && (
-        <div className="mt-2 pt-4 border-t border-[#1F2937]">
-          <div className="flex gap-2 items-center">
+        <div className="mt-4 pt-5 border-t border-sports-border" onClick={(e) => e.stopPropagation()}>
+          <div className="flex gap-3 items-center">
             <input
               type="number" min="0" placeholder="A" value={scoreA}
               onChange={(e) => { setScoreA(e.target.value); setErr(''); }}
-              className="w-14 px-2 py-1.5 rounded bg-[#0F172A] border border-[#1F2937] outline-none
-                text-white text-xs focus:border-purple-500 transition-all text-center"
+              className="w-16 px-3 py-2 rounded-none bg-sports-bg border border-sports-border outline-none
+                text-white text-sm font-bold focus:border-sports-accent transition-all text-center"
             />
-            <span className="text-gray-500 text-xs">-</span>
+            <span className="text-sports-muted text-lg font-black">-</span>
             <input
               type="number" min="0" placeholder="B" value={scoreB}
               onChange={(e) => { setScoreB(e.target.value); setErr(''); }}
-              className="w-14 px-2 py-1.5 rounded bg-[#0F172A] border border-[#1F2937] outline-none
-                text-white text-xs focus:border-purple-500 transition-all text-center"
+              className="w-16 px-3 py-2 rounded-none bg-sports-bg border border-sports-border outline-none
+                text-white text-sm font-bold focus:border-sports-accent transition-all text-center"
             />
             <button
               onClick={handleSave} disabled={saving}
-              className="px-3 py-1.5 rounded bg-[#1F2937] hover:bg-purple-600/20 hover:text-purple-400 text-gray-300 text-xs font-semibold flex-1 transition-all border border-transparent hover:border-purple-500/30"
+              className="px-4 py-2 rounded-none bg-sports-border hover:bg-sports-accent text-white text-[10px] uppercase tracking-widest font-black flex-1 transition-all border border-transparent"
             >
               {saving ? '...' : 'Update'}
             </button>
           </div>
-          {err && <p className="text-xs text-red-400 mt-2">{err}</p>}
+          {err && <p className="text-[10px] uppercase font-bold tracking-widest text-red-400 mt-3">{err}</p>}
         </div>
       )}
     </div>
@@ -200,37 +204,40 @@ const CaptainMatchCard = ({ match, myTeamId }) => {
   const aWins     = done && winnerId && winnerId === aId;
   const bWins     = done && winnerId && winnerId === bId;
 
+  const navigate = useNavigate();
+
   return (
     <div id={`captain-match-${match._id}`}
-      className="bg-[#111827] border border-[#1F2937] rounded-xl p-5 flex flex-col gap-3 transition duration-200 hover:border-purple-500/40 hover:bg-[#0F172A]">
+      onClick={() => navigate(`/matches/${match._id}`)}
+      className="bg-sports-card border border-sports-border rounded-none p-6 flex flex-col gap-4 transition duration-200 hover:border-sports-accent hover:bg-sports-bg cursor-pointer">
       
       {/* TEAM SECTION */}
-      <div className="flex justify-between items-center mb-1">
-        <div className={`text-sm ${aWins ? 'text-green-400 font-semibold' : 'text-white font-medium'}`}>
-          {nameA} {myTeamIsA && <span className="text-gray-500 font-normal ml-1">(You)</span>}
+      <div className="flex justify-between items-center mb-2">
+        <div className={`text-base uppercase tracking-wide truncate w-[40%] text-left ${aWins ? 'text-sports-accent font-black' : 'text-white font-black'}`}>
+          {nameA} {myTeamIsA && <span className="text-sports-muted font-bold text-[10px] tracking-widest ml-2">(YOU)</span>}
         </div>
-        <div className="text-gray-500 text-xs uppercase tracking-wide px-2">vs</div>
-        <div className={`text-sm ${bWins ? 'text-green-400 font-semibold' : 'text-white font-medium'}`}>
-          {myTeamIsB && <span className="text-gray-500 font-normal mr-1">(You)</span>} {nameB}
+        <div className="text-sports-muted text-[10px] font-black uppercase tracking-widest px-2">VS</div>
+        <div className={`text-base uppercase tracking-wide truncate w-[40%] text-right ${bWins ? 'text-sports-accent font-black' : 'text-white font-black'}`}>
+          {myTeamIsB && <span className="text-sports-muted font-bold text-[10px] tracking-widest mr-2">(YOU)</span>} {nameB}
         </div>
       </div>
 
       {/* SCORE SECTION */}
       {done && (
-        <div className="text-center text-lg font-semibold text-white my-1">
+        <div className="text-center text-3xl font-black text-white my-2 tracking-widest">
           {match.scoreA ?? 0} - {match.scoreB ?? 0}
         </div>
       )}
 
       {/* spacer if no score */}
-      {!done && <div className="h-4"></div>}
+      {!done && <div className="h-6"></div>}
 
       {/* META INFO + STATUS BADGE */}
-      <div className="flex justify-between items-center mt-2 pt-4 border-t border-[#1F2937]">
-        <div className="text-gray-400 text-xs">
+      <div className="flex justify-between items-center mt-3 pt-5 border-t border-sports-border">
+        <div className="text-sports-muted text-[10px] font-bold uppercase tracking-widest">
           {formatDate(match.date)} • {safeStr(match.venue, 'TBD')}
         </div>
-        <div className={`px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider shrink-0 ${done ? 'bg-green-600/20 text-green-400' : 'bg-gray-700 text-gray-300'}`}>
+        <div className={`px-3 py-1 rounded-none text-[10px] uppercase font-black tracking-widest shrink-0 border ${done ? 'bg-sports-bg border-sports-accent text-sports-accent' : 'bg-sports-bg border-sports-border text-sports-muted'}`}>
           {done ? 'Completed' : 'Scheduled'}
         </div>
       </div>
@@ -269,11 +276,11 @@ const StatsStrip = ({ matches, myTeamId }) => {
       ];
 
   return (
-    <div className="flex gap-4 mb-8 flex-wrap">
+    <div className="flex gap-6 mb-10 flex-wrap">
       {pills.map(({ label, value }) => (
-        <div key={label} className="bg-[#111827] border border-[#1F2937] rounded-xl px-5 py-4 flex-1 min-w-[120px]">
-          <span className="text-2xl font-bold text-white block mb-1">{value}</span>
-          <span className="text-xs text-gray-500 uppercase font-semibold tracking-wide">{label}</span>
+        <div key={label} className="bg-sports-card border border-sports-border rounded-none p-6 flex-1 min-w-[140px] text-center">
+          <span className="text-4xl font-black text-white block mb-2">{value}</span>
+          <span className="text-[10px] text-sports-muted uppercase font-black tracking-widest">{label}</span>
         </div>
       ))}
     </div>
@@ -396,38 +403,38 @@ const MatchesInner = () => {
 
   /* ── Render ─────────────────────────────────────────────────────── */
   return (
-    <div className="pb-10">
+    <div className="pb-12 font-sans max-w-[1600px] mx-auto text-left">
 
       {/* Toast */}
       {toast.msg && (
-        <div className={`fixed top-4 right-4 z-50 px-4 py-2 rounded border
-          text-sm font-semibold shadow-lg transition-all duration-300
+        <div className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-none border
+          text-[10px] uppercase font-black tracking-widest shadow-2xl transition-all duration-300
           ${toast.type === 'success'
-            ? 'bg-[#111827] border-green-500/40 text-green-400'
-            : 'bg-[#111827] border-red-500/40 text-red-400'}`}>
+            ? 'bg-sports-bg border-green-500/40 text-green-400'
+            : 'bg-sports-bg border-red-500/40 text-red-400'}`}>
           {toast.msg}
         </div>
       )}
 
       {/* ── Page Header ──────────────────────────────────────────────── */}
-      <div className="mb-8 border-b border-[#1F2937] pb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">
+      <div className="mb-10 border-b border-sports-border pb-6">
+        <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">
           Matches
         </h1>
         {selectedTournament ? (
-          <p className="text-gray-400 text-sm">
+          <p className="text-sports-muted text-xs font-bold uppercase tracking-widest">
             {isAdmin ? 'Manage scores and scheduling for ' : 'Tracking matches for '}
-            <span className="text-gray-300 font-medium">{selectedTournament.name}</span>
+            <span className="text-white font-black">{selectedTournament.name}</span>
           </p>
         ) : (
-          <p className="text-gray-400 text-sm">Select a tournament to view matches.</p>
+          <p className="text-sports-muted text-xs font-bold uppercase tracking-widest">Select a tournament to view matches.</p>
         )}
       </div>
 
       {/* ── No Tournament Prompt ─────────────────────────────────────── */}
       {!selectedTournament && (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-gray-500 text-sm">No tournament selected.</p>
+        <div className="flex flex-col items-center justify-center py-24 text-center bg-sports-card border border-sports-border">
+          <p className="text-white font-bold uppercase tracking-widest text-sm">No tournament selected.</p>
         </div>
       )}
 
@@ -438,15 +445,15 @@ const MatchesInner = () => {
 
       {/* ── Filter Tabs ──────────────────────────────────────────────── */}
       {selectedTournament && !loading && allMatches.length > 0 && (
-        <div className="flex gap-4 mb-6 border-b border-[#1F2937] pb-[-1px]">
+        <div className="flex gap-8 mb-8 border-b border-sports-border pb-[-1px]">
           {filterTabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
-              className={`px-1 py-2 text-sm font-medium transition-all duration-200 border-b-2 -mb-[1px]
+              className={`px-2 py-4 text-xs font-black uppercase tracking-widest transition-all duration-200 border-b-2 -mb-[1px]
                 ${activeFilter === tab.id
-                  ? 'border-purple-500 text-white'
-                  : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+                  ? 'border-sports-accent text-sports-accent'
+                  : 'border-transparent text-sports-muted hover:text-white'}`}
             >
               {tab.label}
             </button>
@@ -456,29 +463,29 @@ const MatchesInner = () => {
 
       {/* ── Loading Skeletons ────────────────────────────────────────── */}
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)}
         </div>
       )}
 
       {/* ── Error State ──────────────────────────────────────────────── */}
       {!loading && error && (
-        <div id="matches-error" className="flex items-center justify-center py-12">
-          <p className="text-sm text-red-400 font-medium">{error}</p>
+        <div id="matches-error" className="flex items-center justify-center py-12 bg-red-900/20 border border-red-900 mt-6">
+          <p className="text-[10px] text-red-400 font-black uppercase tracking-widest">{error}</p>
         </div>
       )}
 
       {/* ── Empty State ──────────────────────────────────────────────── */}
       {selectedTournament && !loading && !error && hasLoaded && visibleMatches.length === 0 && (
-        <div id="matches-empty" className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-gray-500 text-sm">No matches scheduled yet</p>
+        <div id="matches-empty" className="flex flex-col items-center justify-center py-24 text-center bg-sports-card border border-sports-border mt-6">
+          <p className="text-white font-bold uppercase tracking-widest text-sm">No matches scheduled yet</p>
         </div>
       )}
 
       {/* ── Match Cards Grid ─────────────────────────────────────────── */}
       {!loading && visibleMatches.length > 0 && (
         <div id="matches-grid" ref={containerRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {visibleMatches.map((match, idx) =>
             isAdmin ? (
               <AdminMatchCard

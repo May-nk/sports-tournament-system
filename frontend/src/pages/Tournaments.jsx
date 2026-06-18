@@ -4,9 +4,9 @@ import { getRole, getToken } from '../services/authService';
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
 const STATUS_STYLE = {
-  upcoming:  'bg-blue-900/20 text-blue-400',
-  ongoing:   'bg-green-600/20 text-green-400',
-  completed: 'bg-gray-700 text-gray-300',
+  upcoming:  'bg-sports-bg border border-blue-500/40 text-blue-400',
+  ongoing:   'bg-sports-bg border border-green-500/40 text-green-400',
+  completed: 'bg-sports-bg border border-sports-border text-sports-muted',
 };
 
 const formatDate = (d) => {
@@ -14,23 +14,23 @@ const formatDate = (d) => {
   return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
-const INPUT_CLS = `w-full px-4 py-2 rounded-md bg-[#0F172A] border border-[#1F2937]
-  text-white placeholder-gray-600 text-sm outline-none
-  focus:border-purple-500 transition duration-200`;
+const INPUT_CLS = `w-full px-4 py-3 rounded-none bg-sports-bg border border-sports-border
+  text-white placeholder-sports-muted/50 text-sm font-bold uppercase outline-none
+  focus:border-sports-accent transition duration-200`;
 
-const LABEL_CLS = `block text-xs font-medium text-gray-500 mb-2`;
+const LABEL_CLS = `block text-[10px] font-black uppercase tracking-widest text-sports-muted mb-2`;
 
 /* ─── Loading skeleton ─────────────────────────────────────────────── */
 const TournamentSkeleton = () => (
-  <div className="rounded-xl border border-[#1F2937] bg-[#111827] p-6 animate-pulse space-y-4">
+  <div className="rounded-none border border-sports-border bg-sports-card p-6 animate-pulse space-y-4">
     <div className="flex justify-between items-start">
       <div className="space-y-2 flex-1">
-        <div className="h-5 bg-[#1F2937] rounded w-1/2" />
-        <div className="h-3 bg-[#1F2937] rounded w-1/3" />
+        <div className="h-5 bg-sports-bg rounded-none w-1/2" />
+        <div className="h-4 bg-sports-bg rounded-none w-1/3" />
       </div>
-      <div className="h-6 w-16 bg-[#1F2937] rounded-full" />
+      <div className="h-6 w-16 bg-sports-bg rounded-none" />
     </div>
-    <div className="h-4 bg-[#1F2937] rounded w-3/4 mt-4" />
+    <div className="h-4 bg-sports-bg rounded-none w-3/4 mt-6" />
   </div>
 );
 
@@ -71,12 +71,12 @@ const CreateTournamentForm = ({ onCreated }) => {
   };
 
   return (
-    <div className="mb-10 rounded-xl border border-[#1F2937] bg-[#111827] p-6 text-left">
-      <h2 className="text-xl font-semibold text-white mb-6">
+    <div className="mb-12 rounded-none border border-sports-border bg-sports-card p-8 text-left">
+      <h2 className="text-2xl font-black uppercase tracking-tight text-white mb-8">
         Create New Tournament
       </h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         {/* Name */}
         <div className="sm:col-span-2">
           <label className={LABEL_CLS}>Tournament Name</label>
@@ -95,8 +95,8 @@ const CreateTournamentForm = ({ onCreated }) => {
         <div>
           <label className={LABEL_CLS}>Format</label>
           <select name="format" value={form.format} onChange={handleChange} className={INPUT_CLS}>
-            <option value="league">League</option>
-            <option value="knockout">Knockout</option>
+            <option value="league">LEAGUE</option>
+            <option value="knockout">KNOCKOUT</option>
           </select>
         </div>
 
@@ -114,16 +114,16 @@ const CreateTournamentForm = ({ onCreated }) => {
 
         {/* Error */}
         {error && (
-          <div className="sm:col-span-2 px-4 py-3 rounded-md border border-red-900 bg-red-900/20 text-red-400 text-sm font-medium">
+          <div className="sm:col-span-2 px-5 py-4 rounded-none border border-red-900 bg-red-900/20 text-red-400 text-[10px] uppercase font-black tracking-widest">
             {error}
           </div>
         )}
 
         {/* Submit */}
-        <div className="sm:col-span-2 mt-2">
+        <div className="sm:col-span-2 mt-4">
           <button type="submit" disabled={loading}
-            className="w-full sm:w-auto px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-500
-              text-white text-sm font-medium transition duration-200 disabled:opacity-50">
+            className="w-full sm:w-auto px-8 py-4 rounded-none bg-sports-accent hover:bg-sports-accentHover
+              text-white text-[10px] font-black uppercase tracking-widest transition duration-200 disabled:opacity-50">
             {loading ? 'Creating...' : 'Create Tournament'}
           </button>
         </div>
@@ -146,27 +146,27 @@ const TournamentCard = ({ t, isAdmin, applied, onApply }) => {
   };
 
   return (
-    <div className="rounded-xl border border-[#1F2937] bg-[#111827] p-6 text-left
-      hover:border-purple-500/40 hover:scale-[1.01] transition duration-200">
+    <div className="rounded-none border border-sports-border bg-sports-card p-6 text-left
+      hover:border-sports-accent/40 transition duration-200">
 
       {/* Top row */}
-      <div className="flex items-start justify-between gap-3 mb-4">
+      <div className="flex items-start justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-white truncate">
+          <h3 className="text-lg font-black uppercase tracking-wide text-white truncate">
             {t.name}
           </h3>
-          <p className="text-xs text-gray-400 mt-1">
-            {t.sport} · <span className="capitalize">{t.format}</span>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-sports-muted mt-2">
+            {t.sport} · <span className="uppercase">{t.format}</span>
           </p>
         </div>
-        <span className={`shrink-0 px-2 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider ${statusCls}`}>
+        <span className={`shrink-0 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest ${statusCls}`}>
           {t.status}
         </span>
       </div>
 
       {/* Date range */}
-      <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-4 mb-5 border-t border-[#1F2937] pt-4">
-        <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sports-muted mt-6 mb-6 border-t border-sports-border pt-6">
+        <svg className="w-4 h-4 shrink-0 text-sports-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round"
             d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5A2.25 2.25 0 015.25 5.25h13.5A2.25 2.25 0 0121 7.5v11.25" />
         </svg>
@@ -179,17 +179,17 @@ const TournamentCard = ({ t, isAdmin, applied, onApply }) => {
           <button
             onClick={handleApply}
             disabled={isApplied || isEnded || busy}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition duration-200
+            className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest transition duration-200
               ${isApplied || isEnded
-                ? 'bg-[#0F172A] text-gray-500 border border-[#1F2937] cursor-not-allowed'
-                : 'bg-purple-600 hover:bg-purple-500 text-white'}`}
+                ? 'bg-sports-bg text-sports-muted border border-sports-border cursor-not-allowed'
+                : 'bg-sports-accent hover:bg-sports-accentHover text-white'}`}
           >
             {busy ? 'Applying...' : isApplied ? 'Applied' : isEnded ? 'Closed' : 'Apply Now'}
           </button>
         )}
 
         {isAdmin && (
-          <span className="text-xs text-gray-500 font-medium">
+          <span className="text-[10px] font-black uppercase tracking-widest text-sports-muted">
             Admin View
           </span>
         )}
@@ -242,19 +242,19 @@ const Tournaments = () => {
   };
 
   return (
-    <div className="text-white pb-10 text-left">
+    <div className="text-white pb-12 font-sans max-w-[1600px] mx-auto text-left">
 
       {/* ── Toast ──────────────────────────────────────────────── */}
       {toast && (
-        <div className="fixed top-4 right-4 z-50 px-4 py-2 rounded border border-[#1F2937] bg-[#111827] text-white text-sm font-medium shadow-lg transition-all duration-300">
+        <div className="fixed top-4 right-4 z-50 px-6 py-4 rounded-none border border-sports-border bg-sports-bg text-sports-accent text-[10px] uppercase font-black tracking-widest shadow-2xl transition-all duration-300">
           {toast}
         </div>
       )}
 
       {/* ── Page header ────────────────────────────────────────── */}
-      <div className="mb-10 border-b border-[#1F2937] pb-6">
-        <h1 className="text-xl font-semibold tracking-tight text-white mb-2">Tournaments</h1>
-        <p className="text-sm text-gray-400">
+      <div className="mb-10 border-b border-sports-border pb-6">
+        <h1 className="text-3xl font-black uppercase tracking-tight text-white mb-2">Tournaments</h1>
+        <p className="text-xs font-bold uppercase tracking-widest text-sports-muted">
           {isAdmin
             ? 'Create and manage all tournaments.'
             : 'Browse available tournaments and apply with your team.'}
@@ -265,21 +265,21 @@ const Tournaments = () => {
       {isAdmin && <CreateTournamentForm onCreated={fetchTournaments} />}
 
       {/* ── Tournament list ─────────────────────────────────────── */}
-      <h2 className="text-xl font-semibold text-white mb-6">
-        All Tournaments <span className="text-gray-500 text-sm ml-2">({tournaments.length})</span>
+      <h2 className="text-2xl font-black uppercase tracking-tight text-white mb-8">
+        All Tournaments <span className="text-sports-muted text-sm ml-3">({tournaments.length})</span>
       </h2>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => <TournamentSkeleton key={i} />)}
         </div>
       ) : tournaments.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 py-24 text-center rounded-xl border border-[#1F2937] bg-[#111827]">
-          <p className="text-white font-medium text-sm">No tournaments found</p>
-          {isAdmin && <p className="text-gray-500 text-xs">Create your first tournament above.</p>}
+        <div className="flex flex-col items-center justify-center py-24 text-center rounded-none border border-sports-border bg-sports-card">
+          <p className="text-white font-bold uppercase tracking-widest text-sm mb-2">No tournaments found</p>
+          {isAdmin && <p className="text-sports-muted text-[10px] font-bold uppercase tracking-widest">Create your first tournament above.</p>}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {tournaments.map((t) => (
             <TournamentCard
               key={t._id}

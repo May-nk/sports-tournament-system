@@ -39,11 +39,86 @@ const matchSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['scheduled', 'completed'],
-      default: 'scheduled',
+      enum: ['scheduled', 'completed', 'Scheduled', 'Live', 'Completed'],
+      default: 'Scheduled',
     },
     round: {
       type: String,
+    },
+    // Phase 1: Cricket Match Center fields
+    matchDate: {
+      type: Date,
+    },
+    tossWinner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
+      default: null,
+    },
+    electedTo: {
+      type: String,
+      enum: ['Bat', 'Bowl'],
+      default: null,
+    },
+    resultText: {
+      type: String,
+      default: '',
+    },
+    playerOfMatch: {
+      type: String,
+      default: '',
+    },
+    // Team 1 Scorecard
+    team1Score: {
+      type: Number,
+      default: 0,
+    },
+    team1Wickets: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 10,
+    },
+    team1Overs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    team1TopScorer: {
+      type: String,
+      default: '',
+    },
+    team1TopScore: {
+      type: Number,
+      default: 0,
+    },
+    // Team 2 Scorecard
+    team2Score: {
+      type: Number,
+      default: 0,
+    },
+    team2Wickets: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 10,
+    },
+    team2Overs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    team2TopScorer: {
+      type: String,
+      default: '',
+    },
+    team2TopScore: {
+      type: Number,
+      default: 0,
+    },
+    // Match Summary
+    matchSummary: {
+      type: String,
+      default: '',
     },
   },
   {

@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-app-bg: #0B0F1A;
-  --color-app-card: #111827;
-  --color-app-border: #1F2937;
-  --color-app-accent: #9333ea;
-  --color-app-accentHover: #a855f7;
-  --color-app-muted: #9ca3af;
-  --color-app-faint: #6b7280;
+  --color-sports-bg: #07111F;
+  --color-sports-card: #0F1B2E;
+  --color-sports-border: #1B2A41;
+  --color-sports-accent: #F59E0B;
+  --color-sports-accentHover: #D97706;
+  --color-sports-text: #F8FAFC;
+  --color-sports-muted: #94A3B8;
 }
 
 body {
-  background: #0B0F1A;
-  color: white;
+  background: var(--color-sports-bg);
+  color: var(--color-sports-text);
 }
